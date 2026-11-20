@@ -1,5 +1,23 @@
 import numpy as np
 
+QUALITY_GUIDANCE = {
+    "Too few valid face samples.": "Keep your face inside the guide area for the full recording.",
+    "Sampling rate is too low.": "Close other apps using the camera and retry.",
+    "Face tracking was lost frequently.": "Center your face, keep still, and improve front-facing lighting.",
+    "Lighting changed substantially during recording.": "Use steady, diffuse lighting and avoid changing lights during the recording.",
+    "Frame timestamps are irregular.": "Close camera-intensive apps, then retry with a steady camera feed.",
+    "Not enough usable filtered signal.": "Let the recording finish, keep still, and retry.",
+    "No frequencies inside the selected BPM range.": "Adjust the BPM search range to include your expected heart rate.",
+    "Pulse-frequency peak is weak or ambiguous.": "Keep still, improve lighting, then repeat the measurement.",
+}
+
+
+def get_quality_guidance(reasons):
+    fallback = "Repeat the measurement with steady lighting and minimal movement."
+    guidance = [QUALITY_GUIDANCE.get(reason, fallback) for reason in reasons]
+    return list(dict.fromkeys(guidance))
+
+
 def assess_quality(timestamps, brightness, face_flags, fs):
     reasons = []
     t = np.asarray(timestamps, dtype=float)

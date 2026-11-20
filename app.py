@@ -10,7 +10,7 @@ from src.roi_extraction import extract_roi_means, draw_rois
 from src.rppg import green_channel_signal, pos_signal
 from src.signal_processing import prepare_signal
 from src.heart_rate import estimate_bpm
-from src.signal_quality import assess_quality
+from src.signal_quality import assess_quality, get_quality_guidance
 
 st.set_page_config(page_title="FacePulse AI", page_icon="💓", layout="wide")
 st.title("💓 FacePulse AI")
@@ -99,8 +99,13 @@ if data:
         result_area.metric("Estimated heart rate", "Unavailable")
         result_area.info("The signal did not pass the quality checks. No BPM is displayed.")
     result_area.write(f"**Signal quality:** {quality['level']}")
-    for reason in dict.fromkeys(quality["reasons"]):
+    reasons = list(dict.fromkeys(quality["reasons"]))
+    for reason in reasons:
         result_area.write(f"• {reason}")
+    if reasons:
+        result_area.write("**What to try next**")
+        for guidance in get_quality_guidance(reasons):
+            result_area.write(f"• {guidance}")
     fig, ax = plt.subplots(figsize=(10, 3))
     ax.plot(processed, linewidth=0.8)
     ax.set_title("Filtered rPPG signal")

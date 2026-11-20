@@ -45,4 +45,5 @@ The application processes frames in memory and does not intentionally save video
 - Ensure camera permission is allowed.
 - Use Python 3.10/3.11 for compatibility with the pinned MediaPipe build.
 - Increase room lighting and keep your face still.
+- Follow the on-screen quality tips when a measurement reports issues.
 - If the app reports poor quality, repeat the measurement rather than trusting a weak estimate.
